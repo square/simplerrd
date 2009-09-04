@@ -2,6 +2,10 @@
 module SimpleRRD
   # useful for setting options in a hash passed to the constructor
   module HashToMethods
+		def initialize(opts = {})
+			call_hash_methods(opts)
+		end
+
     def call_hash_methods(hsh)
       hsh.keys.each do |k|
         self.send("#{k}=", hsh[k])
@@ -49,7 +53,7 @@ module SimpleRRD
 	# handles getting and setting RPN expressions
 	# note that almost no sanity checks are performed: it's 
 	# up to you to make sensible expressions...
-	module RPNExpression 
+	module RPNExpressionAttribute 
 		def rpn_expression 
 			@rpn_expression ||= nil
 		end
@@ -92,5 +96,42 @@ module SimpleRRD
       end
       return terms.join(",")
     end
+	end
+
+	module TextAttribute
+		def text
+			@text ||= nil
+		end
+
+		def text=(t)
+			raise "Strings containing \\: are not supported" if t.include?('\:')
+			@text = t.gsub(':', '\:')
+		end
+	end
+
+	module ValueAttribute
+		def value
+			@value ||= nil
+		end
+
+		def value=(v)
+			raise "Expected a VDef; got " + v.class.to_s unless v.is_a?(VDef)
+			@value = v
+			add_dependency(v)
+		end
+	end
+
+	module ColorAttribute
+		def color
+			@color ||= "FFFFFF"
+		end
+
+		def color=(c)
+			if c == :invisible or c.to_s.match(/\A[0-9a-fA-F]{6,6}\Z/)
+				@color = c 
+			else
+				raise "Bad color specification: #{c}" 
+			end
+		end
 	end
 end

@@ -15,7 +15,7 @@ module SimpleRRD
     # expressions.  Patches to change this are welcome.
     
     include VName
-    include RPNExpression
+    include RPNExpressionAttribute
     include HashToMethods
 
     def initialize(opts={})

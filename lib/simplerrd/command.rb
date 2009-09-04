@@ -1,6 +1,7 @@
 module SimpleRRD
   class Command
     include DependencyTracking
+    include HashToMethods
   end
 
   CONSOLIDATION_FUNCTIONS = ["AVERAGE", "MIN", "MAX", "LAST", "HWPREDICT",

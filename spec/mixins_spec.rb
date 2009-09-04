@@ -59,11 +59,11 @@ describe "SimpleRRD::DependencyTracking" do
 
 end
 
-describe "SimpleRRD::RPNExpression" do
+describe "SimpleRRD::RPNExpressionAttribute" do
 	before do
 		class TestThree 
 			include SimpleRRD::DependencyTracking
-			include SimpleRRD::RPNExpression
+			include SimpleRRD::RPNExpressionAttribute
 
 			def allowed_functions
 				["x", "xx", "xxx"]
@@ -105,5 +105,71 @@ describe "SimpleRRD::RPNExpression" do
 		@t.should_receive(:add_dependency).with(cd)
 
 		@t.rpn_expression=[1,2,d,vd,cd,'xxx','x','xx']
+	end
+end
+
+describe "SimpleRRD::TextAttribute" do
+	before do
+		class TestFour
+			include SimpleRRD::TextAttribute
+		end
+
+		@t = TestFour.new
+	end
+	it "should raise an exception if the text string contains \\:" do
+		lambda { @t.text='foo\:poo' }.should raise_error
+	end
+
+	it "should escape colons with a \\" do
+		@t.text = 'foo: boo'
+		@t.text == 'foo\: boo'
+	end
+end
+
+describe "SimpleRRD::ValueAttribute" do
+	before do
+		class TestFive
+			include SimpleRRD::DependencyTracking
+			include SimpleRRD::ValueAttribute
+		end
+		@t = TestFive.new
+		@vd = SimpleRRD::VDef.new
+	end
+
+	it "should (only) allow a VDef to be stored as the value" do
+		@t.value = @vd
+		@t.value.should == @vd
+
+		lambda { @t.value = 123 }.should raise_error
+	end
+
+	it "should have the vdef in value as a dependency" do
+		@t.value = @vd
+		@t.dependencies.should include(@vd)
+	end
+end
+
+describe "SimpleRRD::ColorAttribute" do
+	before do
+		class TestSix
+			include SimpleRRD::ColorAttribute
+		end
+		@t = TestSix.new
+	end
+
+	it "should (only) allow setting reasonable hex RGB values in #color=" do
+		@t.color = "AABBCC"
+		@t.color.should == "AABBCC"
+		lambda { @t.color = "food" }.should raise_error
+		lambda { @t.color = "1234567" }.should raise_error
+	end
+
+	it "should default to black" do
+		@t.color.should == "FFFFFF"
+	end
+
+	it "should allow color to be set to :invisible" do
+		@t.color = :invisible
+		@t.color.should == :invisible
 	end
 end

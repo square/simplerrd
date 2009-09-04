@@ -11,7 +11,7 @@ module SimpleRRD
 		#   Example: "CDEF:mydatabits=mydata,8,*"
 		
 		include VName
-		include RPNExpression
+		include RPNExpressionAttribute
     include HashToMethods
 
 		def initialize(opts = {})
