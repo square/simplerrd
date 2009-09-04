@@ -12,6 +12,12 @@ module SimpleRRD
   VDEF_FUNCTIONS = ["MAXIMUM", "MINIMUM", "AVERAGE", "STDEV", "LAST", 
                     "FIRST", "TOTAL", "PERCENT", "LSLSLOPE", "LSLINT",
                     "LSLCORREL"]
+  CDEF_FUNCTIONS = ["LT", "LE", "GT", "GE", "EQ", "NE", "UN", "ISINF", "IF",
+    "MIN", "MAX", "LIMIT", "+", "-", "*", "/", "%", "ADDNAN", "SIN", "COS",
+    "LOG", "EXP", "SQRT", "ATAN", "ATAN2", "FLOOR", "CEIL", "DEG2RAD",
+    "RAD2DEG", "ABS", "SORT", "REV", "AVG", "TREND", "TRENDNAN", "UNKN",
+    "INF", "NEGINF", "PREV", "COUNT", "NOW", "TIME", "LTIME", "DUP", "POP",
+    "EXC"]
 end
 
 require 'simplerrd/command/def'

@@ -26,5 +26,9 @@ module SimpleRRD
       end
       return all_deps.uniq # horribly ineffecient. sigh.
     end
+		
+		def clear_dependencies
+			@dependencies = []
+		end
   end
 end

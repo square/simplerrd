@@ -29,10 +29,14 @@ describe "SimpleRRD::VDef" do
     lambda { @v.expression_string }.should raise_error
   end
 
-  it "should have a dependency on any Def in the RPN expression" do
+  it "should have a dependency on any ?Def in the RPN expression" do
     d = SimpleRRD::Def.new
     @v.rpn_expression = [d,"MAXIMUM"]
     @v.dependencies.should == [d]
+
+    c = SimpleRRD::CDef.new
+    @v.rpn_expression = [c,"MAXIMUM"]
+    @v.dependencies.should == [c]
   end
 
   it "should raise an exception if #definition is called without a required variable set" do

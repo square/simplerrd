@@ -28,6 +28,7 @@ module SimpleRRD
 
     def rpn_expression=(ary)
       raise "Expected Array of RPN terms; got " + ary.class.to_s unless ary.is_a? Array
+      clear_dependencies
       ary.each do |term|
         case term
         when Numeric: 
