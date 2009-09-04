@@ -32,27 +32,25 @@ module SimpleRRD
     #    DEF:ds0weekly=router.rrd:ds0:AVERAGE:start=end-1h
     #    DEF:ds0weekly=router.rrd:ds0:AVERAGE:start=11\:00:end=start+1h
     
+    include VName
+    include HashToMethods
+
     def initialize(opts = {})
       @rrdfile = nil
-      @vname   = "obj#{self.object_id}"
       @ds_name = nil
       @cf      = nil
       @step    = nil
       @start   = nil
       @end     = nil
       @reduce  = nil
+      call_hash_methods(opts)
     end
 
-    attr_reader :rrdfile, :vname, :ds_name, :cf, :step, :start, :end, :reduce
+    attr_reader :rrdfile, :ds_name, :cf, :step, :start, :end, :reduce
 
     def rrdfile=(f)
       raise "Expected RRDFile; got " + f.class.to_s unless f.is_a?(RRDFile)
       @rrdfile = f
-    end
-
-    def vname=(n)
-      raise "Bad vname: #{n}" unless n.match(VNAME_REGEX)
-      @vname = n
     end
 
     def ds_name=(n)

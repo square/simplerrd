@@ -14,51 +14,16 @@ module SimpleRRD
     # Note that currently only aggregation functions work in VDEF rpn
     # expressions.  Patches to change this are welcome.
     
+    include VName
+    include RPNExpression
+    include HashToMethods
+
     def initialize(opts={})
-      @vname          = "obj#{self.object_id}"
-      @rpn_expression = nil
+      call_hash_methods(opts)
     end
 
-    attr_reader :vname, :rpn_expression
-
-    def vname=(n)
-      raise "Bad vname: #{n}" unless n.match(VNAME_REGEX)
-      @vname = n
-    end
-
-    def rpn_expression=(ary)
-      raise "Expected Array of RPN terms; got " + ary.class.to_s unless ary.is_a? Array
-      clear_dependencies
-      ary.each do |term|
-        case term
-        when Numeric: 
-          next
-        when Def:     
-          add_dependency(term)
-        when CDef:
-          add_dependency(term)
-        when String:
-          next if VDEF_FUNCTIONS.include?(term)
-          raise "Not a valid VDEF function: #{term}"
-        else
-          raise "Not sure what to do with a " + term.class.to_s
-        end
-      end
-      @rpn_expression = ary
-    end
-
-    def expression_string
-      terms = []
-      @rpn_expression.each do |t|
-        case t
-        when Numeric: terms << t
-        when Def:     terms << t.vname
-        when CDef:    terms << t.vname 
-        when String:  terms << t
-        else raise "Unexpected term in RPN expression: #{t.inspect}"
-        end
-      end
-      return terms.join(",")
+    def allowed_functions 
+      VDEF_FUNCTIONS
     end
 
     def definition

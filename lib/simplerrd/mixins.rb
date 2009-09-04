@@ -9,6 +9,8 @@ module SimpleRRD
     end
   end
 
+	# contains the structures necessary to track dependencies
+	# (eg, between RRD commands)
   module DependencyTracking
     def dependencies
       @dependencies ||= []
@@ -31,4 +33,64 @@ module SimpleRRD
 			@dependencies = []
 		end
   end
+
+	# common stuff to setting and getting RPN expression vnames
+	module VName
+		def vname
+			@vname ||= "obj#{self.object_id}"
+		end
+
+    def vname=(n)
+      raise "Bad vname: #{n}" unless n.match(VNAME_REGEX)
+      @vname = n
+    end
+	end
+
+	# handles getting and setting RPN expressions
+	# note that almost no sanity checks are performed: it's 
+	# up to you to make sensible expressions...
+	module RPNExpression 
+		def rpn_expression 
+			@rpn_expression ||= nil
+		end
+
+    def rpn_expression=(ary)
+      raise "Expected Array of RPN terms; got " + ary.class.to_s unless ary.is_a? Array
+			clear_dependencies 
+			ary.each do |term|
+        case term
+        when Numeric: 
+          next
+        when Def:     
+          add_dependency(term)
+        when VDef:
+          add_dependency(term)
+        when CDef:
+          add_dependency(term)
+        when String:
+          next if allowed_functions.include?(term)
+          raise "Not an allowed function: #{term}"
+        else
+          raise "Not sure what to do with a " + term.class.to_s
+        end
+      end
+      @rpn_expression = ary
+    end
+
+
+    def expression_string
+      terms = []
+      @rpn_expression.each do |t|
+        case t
+        when Numeric: terms << t
+        when Def:     terms << t.vname
+        when VDef:    terms << t.vname 
+        when CDef:    terms << t.vname 
+        when String:  terms << t
+        else raise "Unexpected term in RPN expression: #{t.inspect}"
+        end
+      end
+      return terms.join(",")
+    end
+	end
 end

@@ -23,3 +23,4 @@ end
 require 'simplerrd/command/def'
 require 'simplerrd/command/vdef'
 require 'simplerrd/command/cdef'
+require 'simplerrd/command/graph'
