@@ -36,17 +36,17 @@ module SimpleRRD
     include HashToMethods
 
     def initialize(opts = {})
-      @rrdfile = nil
-      @ds_name = nil
-      @cf      = nil
-      @step    = nil
-      @start   = nil
-      @end     = nil
-      @reduce  = nil
+      @rrdfile      = nil
+      @ds_name      = nil
+      @cf           = nil
+      @step         = nil
+      @start_time   = nil
+      @end_time     = nil
+      @reduce       = nil
       call_hash_methods(opts)
     end
 
-    attr_reader :rrdfile, :ds_name, :cf, :step, :start, :end, :reduce
+    attr_reader :rrdfile, :ds_name, :cf, :step, :start_time, :end_time, :reduce
 
     def rrdfile=(f)
       raise "Expected a String; got a " + f.class.to_s unless f.is_a?(String)
@@ -68,14 +68,14 @@ module SimpleRRD
       @step = s.to_i
     end
 
-    def start=(t)
+    def start_time=(t)
       raise "Expected Time; got " + t.class.to_s unless t.is_a?(Time)
-      @start = t
+      @start_time = t
     end
 
-    def end=(t)
+    def end_time=(t)
       raise "Expected Time; got " + t.class.to_s unless t.is_a?(Time)
-      @end = t
+      @end_time = t
     end
 
     def reduce=(fn)
@@ -88,11 +88,11 @@ module SimpleRRD
       raise "Definition incomplete: missing ds_name" unless @ds_name
       raise "Definition incomplete: missing cf"      unless @cf
 
-      res = "DEF:#{@vname}=#{@rrdfile}:#{@ds_name}:#{cf}"
-      res << ":step=#{@step}"        if @step
-      res << ":start=#{@start.to_i}" if @start
-      res << ":end=#{@end.to_i}"     if @end
-      res << ":reduce=#{@reduce}"    if @reduce
+      res = "DEF:#{vname}=#{rrdfile}:#{ds_name}:#{cf}"
+      res << ":step=#{step}"             if step
+      res << ":start=#{start_time.to_i}" if start_time
+      res << ":end=#{end_time.to_i}"     if end_time
+      res << ":reduce=#{reduce}"         if reduce
       return res
     end
   end

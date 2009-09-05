@@ -44,16 +44,16 @@ describe "SimpleRRD::Def" do
     lambda { @d.step = -10 }.should raise_error
   end
 
-  it "should (only) allow setting Time values for start/end" do
+  it "should (only) allow setting Time values for start_time/end_time" do
     e = Time.now
     s = e - 3600
 
-    @d.start=s
-    @d.end=e
-    @d.start.should == s
-    @d.end.should == e
-    lambda { @d.start="hello" }.should raise_error
-    lambda { @d.end="hello" }.should raise_error
+    @d.start_time=s
+    @d.end_time=e
+    @d.start_time.should == s
+    @d.end_time.should == e
+    lambda { @d.start_time="hello" }.should raise_error
+    lambda { @d.end_time="hello" }.should raise_error
   end
 
   it "should have no dependencies" do
@@ -91,10 +91,10 @@ describe "SimpleRRD::Def" do
     @d.step = 300
     @d.definition.should == 'DEF:d=file.rrd:ds0:MAX:step=300'
 
-    @d.start = s
+    @d.start_time = s
     @d.definition.should == "DEF:d=file.rrd:ds0:MAX:step=300:start=#{s.to_i}"
 
-    @d.end = e
+    @d.end_time = e
     @d.definition.should == "DEF:d=file.rrd:ds0:MAX:step=300:start=#{s.to_i}:end=#{e.to_i}"
 
     @d.reduce = 'AVERAGE'
