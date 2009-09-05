@@ -64,7 +64,7 @@ describe "SimpleRRD::Line" do
 		@l.stack.should == false
 	end
 
-	it "#definition should raise an error if no value is set" do
+	it "#definition should raise an error if no data is set" do
 		lambda { @d.definition }.should raise_error
 	end
 
@@ -75,13 +75,13 @@ describe "SimpleRRD::Line" do
 	end
 
 	it "should return the correct definition" do
-		val = SimpleRRD::VDef.new(:vname => 'data')
-		SimpleRRD::Line.new(:value => val).definition.should == "LINE1:data\#FFFFFF"
-		SimpleRRD::Line.new(:value => val, :color => 'DEADBF').definition.should == "LINE1:data\#DEADBF"
-		SimpleRRD::Line.new(:value => val, :color => :invisible).definition.should == "LINE1:data"
-		SimpleRRD::Line.new(:value => val, :width => 5).definition.should == "LINE5:data\#FFFFFF"
-		SimpleRRD::Line.new(:value => val, :text => 'lozenges/sec').definition.should == "LINE1:data\#FFFFFF:lozenges/sec"
-		SimpleRRD::Line.new(:value => val, :color => "AABBCC", 
+		val = SimpleRRD::Def.new(:vname => 'data')
+		SimpleRRD::Line.new(:data => val).definition.should == "LINE1:data\#FFFFFF"
+		SimpleRRD::Line.new(:data => val, :color => 'DEADBF').definition.should == "LINE1:data\#DEADBF"
+		SimpleRRD::Line.new(:data => val, :color => :invisible).definition.should == "LINE1:data"
+		SimpleRRD::Line.new(:data => val, :width => 5).definition.should == "LINE5:data\#FFFFFF"
+		SimpleRRD::Line.new(:data => val, :text => 'lozenges/sec').definition.should == "LINE1:data\#FFFFFF:lozenges/sec"
+		SimpleRRD::Line.new(:data => val, :color => "AABBCC", 
 				 							  :width => 10, :text => 'RALPH', 
 											  :stack=>true).definition.should == "LINE10:data\#AABBCC:RALPH:STACK"
 	end
@@ -101,7 +101,7 @@ describe "SimpleRRD::Area" do
 		@l.stack.should == false
 	end
 
-	it "#definition should raise an error if no value is set" do
+	it "#definition should raise an error if no data is set" do
 		lambda { @d.definition }.should raise_error
 	end
 
@@ -112,12 +112,12 @@ describe "SimpleRRD::Area" do
 	end
 
 	it "should return the correct definition" do
-		val = SimpleRRD::VDef.new(:vname => 'data')
-		SimpleRRD::Area.new(:value => val).definition.should == "AREA:data\#FFFFFF"
-		SimpleRRD::Area.new(:value => val, :color => 'DEADBF').definition.should == "AREA:data\#DEADBF"
-		SimpleRRD::Area.new(:value => val, :color => :invisible).definition.should == "AREA:data"
-		SimpleRRD::Area.new(:value => val, :text => 'lozenges/sec').definition.should == "AREA:data\#FFFFFF:lozenges/sec"
-		SimpleRRD::Area.new(:value => val, :color => "AABBCC", :text => 'RALPH', 
+		val = SimpleRRD::Def.new(:vname => 'data')
+		SimpleRRD::Area.new(:data => val).definition.should == "AREA:data\#FFFFFF"
+		SimpleRRD::Area.new(:data => val, :color => 'DEADBF').definition.should == "AREA:data\#DEADBF"
+		SimpleRRD::Area.new(:data => val, :color => :invisible).definition.should == "AREA:data"
+		SimpleRRD::Area.new(:data => val, :text => 'lozenges/sec').definition.should == "AREA:data\#FFFFFF:lozenges/sec"
+		SimpleRRD::Area.new(:data => val, :color => "AABBCC", :text => 'RALPH', 
 												:stack=>true).definition.should == "AREA:data\#AABBCC:RALPH:STACK"
 	end
 end

@@ -121,6 +121,18 @@ module SimpleRRD
 		end
 	end
 
+	module DataAttribute
+		def data
+			@data ||= nil
+		end
+
+		def data=(v)
+			raise "Expected a Def or CDef; got " + v.class.to_s unless v.is_a?(CDef) or v.is_a?(Def)
+			@data = v
+			add_dependency(v)
+		end
+	end
+
 	module ColorAttribute
 		def color
 			@color ||= "FFFFFF"

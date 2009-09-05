@@ -101,7 +101,7 @@ module SimpleRRD
 		#  you want to use STACK, use the "LINEx:<value>::STACK" form.
 
 		include TextAttribute
-		include ValueAttribute
+		include DataAttribute
 		include ColorAttribute
 
 		def initialize(opts = {})
@@ -123,9 +123,9 @@ module SimpleRRD
 		end
 
 		def definition
-			raise "Value required but not set" unless value
+			raise "Data required but not set" unless data
 			raise "Text specified, but color set to :invisible" if text and color == :invisible
-			ret = "LINE#{width}:#{value.vname}"
+			ret = "LINE#{width}:#{data.vname}"
 			ret << "\##{color}" unless color == :invisible
 			ret << ":#{text}" if text
 			ret << ":STACK" if stack
@@ -138,7 +138,7 @@ module SimpleRRD
 		#
 		#  See LINE, however the area between the x-axis and the line will be filled.
 		include TextAttribute
-		include ValueAttribute
+		include DataAttribute
 		include ColorAttribute
 
 		def initialize(opts = {})
@@ -153,9 +153,9 @@ module SimpleRRD
 		end
 
 		def definition
-			raise "Value required but not set" unless value
+			raise "Data required but not set" unless data
 			raise "Text specified, but color set to :invisible" if text and color == :invisible
-			ret = "AREA:#{value.vname}"
+			ret = "AREA:#{data.vname}"
 			ret << "\##{color}" unless color == :invisible
 			ret << ":#{text}" if text
 			ret << ":STACK" if stack

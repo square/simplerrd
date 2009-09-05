@@ -149,6 +149,39 @@ describe "SimpleRRD::ValueAttribute" do
 	end
 end
 
+describe "SimpleRRD::DataAttribute" do
+	before do
+		class TestFivePointFive
+			include SimpleRRD::DependencyTracking
+			include SimpleRRD::DataAttribute
+		end
+		@t = TestFivePointFive.new
+		@d = SimpleRRD::Def.new
+		@cd = SimpleRRD::CDef.new
+	end
+
+	it "should allow a Def to be stored as the data" do
+		@t.data = @d
+		@t.data.should == @d
+	end
+
+	it "should allow a CDef to be stored as the data" do
+		@t.data = @cd
+		@t.data.should == @cd
+	end
+
+	it "should not allow anything else to be stored as the data" do
+		lambda { @t.value = 123 }.should raise_error
+	end
+
+	it "should have the ?def in data as a dependency" do
+		@t.data = @d
+		@t.dependencies.should include(@d)
+		@t.data = @cd
+		@t.dependencies.should include(@cd)
+	end
+end
+
 describe "SimpleRRD::ColorAttribute" do
 	before do
 		class TestSix
