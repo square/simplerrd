@@ -49,7 +49,7 @@ module SimpleRRD
     attr_reader :rrdfile, :ds_name, :cf, :step, :start, :end, :reduce
 
     def rrdfile=(f)
-      raise "Expected RRDFile; got " + f.class.to_s unless f.is_a?(RRDFile)
+      raise "Expected a String; got a " + f.class.to_s unless f.is_a?(String)
       @rrdfile = f
     end
 
@@ -88,7 +88,7 @@ module SimpleRRD
       raise "Definition incomplete: missing ds_name" unless @ds_name
       raise "Definition incomplete: missing cf"      unless @cf
 
-      res = "DEF:#{@vname}=#{@rrdfile.filename}:#{@ds_name}:#{cf}"
+      res = "DEF:#{@vname}=#{@rrdfile}:#{@ds_name}:#{cf}"
       res << ":step=#{@step}"        if @step
       res << ":start=#{@start.to_i}" if @start
       res << ":end=#{@end.to_i}"     if @end

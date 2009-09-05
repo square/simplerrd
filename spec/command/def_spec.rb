@@ -4,11 +4,10 @@ describe "SimpleRRD::Def" do
   before do
     @d = SimpleRRD::Def.new
   end
-  it "should (only) allow setting an RRDFile via #rrdfile=" do
-    f = SimpleRRD::RRDFile.new("/etc/passwd")
-    @d.rrdfile = f
-    @d.rrdfile.should == f
-    lambda { @d.rrdfile = "/etc/passwd" }.should raise_error
+  it "should (only) allow passing strings to #rrdfile=" do
+    @d.rrdfile = "/etc/passwd"
+    @d.rrdfile.should == "/etc/passwd"
+    lambda { @d.rrdfile = Time.now }.should raise_error
   end
 
   it "should have an auto-generated vname by default" do
@@ -62,30 +61,27 @@ describe "SimpleRRD::Def" do
   end
 
   it "should raise an exception if #definition is called without a required variable set" do
-    file = SimpleRRD::RRDFile.new('file.rrd')
-
     nofile         = SimpleRRD::Def.new
     nofile.ds_name = 'ds0'
     nofile.cf      = 'MAX'
     lambda { nofile.definition }.should raise_error
 
     nods         = SimpleRRD::Def.new
-    nods.rrdfile = file
+    nods.rrdfile = 'file.rrd'
     nods.cf      = 'MAX'
     lambda { nods.definition }.should raise_error
 
     nocf         = SimpleRRD::Def.new
     nocf.ds_name = 'ds0'
-    nocf.rrdfile = file
+    nocf.rrdfile = 'file.rrd'
     lambda { nocf.definition }.should raise_error
   end
 
   it "should return a correct definition in #definition" do
-    file = SimpleRRD::RRDFile.new('file.rrd')
     e = Time.now
     s = e - 3600
 
-    @d.rrdfile = file
+    @d.rrdfile = 'file.rrd'
     @d.ds_name = 'ds0'
     @d.cf      = 'MAX'
     @d.vname   = 'd'
