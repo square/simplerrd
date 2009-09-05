@@ -52,7 +52,7 @@ graph = SimpleRRD::Graph.new
 graph.width = 640
 graph.height = 240
 
-graph.end_time = Time.at(1252107236) # => Fri Sep 05 16:33:56 -0700 2009
+graph.end_at = Time.at(1252107236) # => Fri Sep 05 16:33:56 -0700 2009
 
 graph.add_element(buffer_area)
 graph.add_element(free_area)

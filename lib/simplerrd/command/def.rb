@@ -39,13 +39,13 @@ module SimpleRRD
       @ds_name      = nil
       @cf           = nil
       @step         = nil
-      @start_time   = nil
-      @end_time     = nil
+      @start_at     = nil
+      @end_at       = nil
       @reduce       = nil
       call_hash_methods(opts)
     end
 
-    attr_reader :rrdfile, :ds_name, :cf, :step, :start_time, :end_time, :reduce
+    attr_reader :rrdfile, :ds_name, :cf, :step, :start_at, :end_at, :reduce
 
     def rrdfile=(f)
       raise "Expected a String; got a " + f.class.to_s unless f.is_a?(String)
@@ -67,14 +67,14 @@ module SimpleRRD
       @step = s.to_i
     end
 
-    def start_time=(t)
+    def start_at=(t)
       raise "Expected Time; got " + t.class.to_s unless t.is_a?(Time)
-      @start_time = t
+      @start_at = t
     end
 
-    def end_time=(t)
+    def end_at=(t)
       raise "Expected Time; got " + t.class.to_s unless t.is_a?(Time)
-      @end_time = t
+      @end_at = t
     end
 
     def reduce=(fn)
@@ -89,8 +89,8 @@ module SimpleRRD
 
       res = "DEF:#{vname}=#{rrdfile}:#{ds_name}:#{cf}"
       res << ":step=#{step}"             if step
-      res << ":start=#{start_time.to_i}" if start_time
-      res << ":end=#{end_time.to_i}"     if end_time
+      res << ":start=#{start_at.to_i}"   if start_at
+      res << ":end=#{end_at.to_i}"       if end_at
       res << ":reduce=#{reduce}"         if reduce
       return res
     end

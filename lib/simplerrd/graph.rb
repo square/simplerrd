@@ -5,8 +5,8 @@ module SimpleRRD
     ALLOWED_FORMATS=["SVG", "PNG", "EPS", "PDF"]
 
     def initialize(opts={})
-      @start_time    = nil
-      @end_time      = nil
+      @start_at = nil
+      @end_at   = nil
       @title    = nil
       @width    = nil
       @height   = nil
@@ -16,16 +16,16 @@ module SimpleRRD
       call_hash_methods(opts)
     end
 
-    attr_reader :start_time, :end_time, :title, :width, :height, :format, :elements
+    attr_reader :start_at, :end_at, :title, :width, :height, :format, :elements
 
-    def start_time=(t)
+    def start_at=(t)
       raise "Expected Time; got " + t.class.to_s unless t.is_a?(Time)
-      @start_time = t
+      @start_at = t
     end
 
-    def end_time=(t)
+    def end_at=(t)
       raise "Expected Time; got " + t.class.to_s unless t.is_a?(Time)
-      @end_time = t
+      @end_at = t
     end
     
     def title=(s)
@@ -67,9 +67,9 @@ module SimpleRRD
 
     def command_flags
       flags = []
-      flags.concat(['--start', @start_time.to_i.to_s]) if @start_time
-      if @end_time
-        flags.concat(['--end', @end_time.to_i.to_s])
+      flags.concat(['--start', @start_at.to_i.to_s]) if @start_at
+      if @end_at
+        flags.concat(['--end', @end_at.to_i.to_s])
       else
         flags.concat(['--end', 'now'])
       end

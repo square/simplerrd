@@ -5,19 +5,19 @@ describe "SimpleRRD::Graph" do
     @g = SimpleRRD::Graph.new
   end
 
-  it "should take a Time value for #start_time= and #end_time=" do
+  it "should take a Time value for #start_at= and #end_at=" do
     e = Time.now
     s = e - 3600
 
-    @g.start_time=s
-    @g.end_time=e
-    @g.start_time.should == s
-    @g.end_time.should == e
+    @g.start_at=s
+    @g.end_at=e
+    @g.start_at.should == s
+    @g.end_at.should == e
   end
   
   it "should raise an exception if a non-Time value is passed to them" do
-    lambda { @g.start_time="hello" }.should raise_error
-    lambda { @g.end_time="hello" }.should raise_error
+    lambda { @g.start_at="hello" }.should raise_error
+    lambda { @g.end_at="hello" }.should raise_error
   end
   
   it "should (only) allow setting of a string as a title" do
@@ -70,8 +70,8 @@ describe "SimpleRRD::Graph" do
     e = Time.now
     s = e - 3600
 
-    @g.start_time = s
-    @g.end_time = e
+    @g.start_at = s
+    @g.end_at = e
     @g.title = "MY GRAF"
     @g.width = 640
     @g.height = 480
@@ -108,8 +108,8 @@ describe "SimpleRRD::Graph" do
     e = Time.now
     s = e - 3600
 
-    @g.start_time = s
-    @g.end_time = e
+    @g.start_at = s
+    @g.end_at = e
     @g.title = "MY GRAF"
     @g.width = 640
     @g.height = 480
