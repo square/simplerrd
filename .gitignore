@@ -3,3 +3,6 @@
 coverage
 rdoc
 pkg
+examples/*.png
+examples/*.svg
+examples/data/*/*.rrd
