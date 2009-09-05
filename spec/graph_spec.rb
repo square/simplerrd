@@ -44,6 +44,28 @@ describe "SimpleRRD::Graph" do
     lambda { @g.format = "bread" }.should raise_error
   end
 
+  it "should (only) allow adding RPN Commands to the graph" do
+    d = SimpleRRD::Def.new
+    @g.add_element(d)
+    @g.elements.should include(d)
+    lambda { @g.add_element(123) }.should raise_error
+  end
+
+  it "should return all dependencies in #dependenceies" do
+    d = SimpleRRD::Line.new
+    e = SimpleRRD::Area.new
+    @g.add_element(d)
+    @g.add_element(e)
+    d.should_receive(:all_dependencies).and_return([:foo,:bar])
+    e.should_receive(:all_dependencies).and_return([:foo,:baz])
+    deps = @g.dependencies
+    deps.should include(:foo)
+    deps.should include(:bar)
+    deps.should include(:baz)
+    deps.should include(d)
+    deps.should include(e)
+  end
+
   it "should generate appropriate commandline flags for the options set" do
     e = Time.now
     s = e - 3600
@@ -67,9 +89,53 @@ describe "SimpleRRD::Graph" do
     @g.command_flags.should == ['--end', 'now']
   end
 
-  it "should allow setting the various options through the constructor hash" do
-    n = SimpleRRD::Graph.new(:title => "TITLE", :width => 100)
-    n.title.should == "TITLE"
-    n.width.should == 100
+  it "#command_expressions should return the definition of all of the graph's dependencies" do
+    a = SimpleRRD::Def.new
+    a.should_receive(:definition).and_return('DEF:blah:bloo')
+
+    d = SimpleRRD::Line.new
+    d.should_receive(:dependencies).and_return([a])
+    d.should_receive(:definition).and_return('LINE:foo:bar')
+
+    @g.add_element(d)
+
+    exprs = @g.command_expressions
+    exprs.should include('DEF:blah:bloo')
+    exprs.should include('LINE:foo:bar')
+  end
+
+  it "should use Runner.run to execute the proper command" do
+    e = Time.now
+    s = e - 3600
+
+    @g.start = s
+    @g.end = e
+    @g.title = "MY GRAF"
+    @g.width = 640
+    @g.height = 480
+    @g.format = "PNG"
+
+    a = SimpleRRD::Def.new
+    a.should_receive(:definition).and_return('DEF:blah:bloo')
+
+    d = SimpleRRD::Line.new
+    d.should_receive(:dependencies).and_return([a])
+    d.should_receive(:definition).and_return('LINE:foo:bar')
+
+    @g.add_element(d)
+
+    expected_command = ['rrdtool', 'graph', '-',
+                        '--start', s.to_i.to_s,
+                        '--end',   e.to_i.to_s,
+                        '--title', "MY GRAF",
+                        '--width', '640',
+                        '--height', '480',
+                        '--imgformat', 'PNG',
+                        'DEF:blah:bloo',
+                        'LINE:foo:bar']
+ 
+    SimpleRRD::Runner.should_receive(:run).with(*expected_command).and_return('ok')
+
+    @g.generate.should == 'ok'
   end
 end

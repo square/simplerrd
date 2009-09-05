@@ -51,6 +51,20 @@ module SimpleRRD
       end
     end
 
+    def add_element(elt)
+      raise "Expected a Command; got " + elt.class.to_s unless elt.is_a?(Command)
+      @elements << elt
+    end
+
+    def dependencies
+      deps = []
+      @elements.each do |elt|
+        deps.concat(elt.all_dependencies)
+        deps << elt
+      end
+      return deps.uniq
+    end
+
     def command_flags
       flags = []
       flags.concat(['--start', @start.to_i.to_s]) if @start
@@ -64,6 +78,21 @@ module SimpleRRD
       flags.concat(['--height', @height.to_s]) if @height
       flags.concat(['--imgformat', @format]) if @format
       return flags
+    end
+
+    def command_expressions
+      exprs = []
+      dependencies.each do |dep|
+        exprs << dep.definition
+      end
+      return exprs
+    end
+
+    def generate(filename = '-')
+      cmd = ['rrdtool', 'graph', filename]
+      cmd.concat(command_flags)
+      cmd.concat(command_expressions)
+      Runner.run(*cmd)
     end
   end
 end
