@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "SimpleRRD::HashToMethods" do
+describe "SimpleRRD::OptionsHash" do
   before do
     class TestOne
-      include SimpleRRD::HashToMethods
+      include SimpleRRD::OptionsHash
     end
 
     @t = TestOne.new
@@ -205,4 +205,14 @@ describe "SimpleRRD::ColorAttribute" do
 		@t.color = :invisible
 		@t.color.should == :invisible
 	end
+
+  it "should (only) allow setting hex opacity values with #alpha=" do
+    @t.alpha = "AA"
+    @t.alpha.should == "AA"
+    lambda { @t.alpha = 'duck' }.should raise_error
+  end
+
+  it "should default opacity of fully opaque" do
+    @t.alpha.should == "FF"
+  end
 end

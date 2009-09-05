@@ -1,6 +1,6 @@
 module SimpleRRD
   class Graph
-    include SimpleRRD::HashToMethods
+    include OptionsHash
     
     ALLOWED_FORMATS=["SVG", "PNG", "EPS", "PDF"]
 

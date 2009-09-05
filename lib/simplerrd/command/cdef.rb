@@ -12,11 +12,6 @@ module SimpleRRD
 		
 		include VName
 		include RPNExpressionAttribute
-    include HashToMethods
-
-		def initialize(opts = {})
-			call_hash_methods(opts)
-		end
 		
 		def allowed_functions 
 			CDEF_FUNCTIONS

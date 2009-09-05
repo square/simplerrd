@@ -1,7 +1,7 @@
 # miscellaneous mixins
 module SimpleRRD
   # useful for setting options in a hash passed to the constructor
-  module HashToMethods
+  module OptionsHash
 		def initialize(opts = {})
 			call_hash_methods(opts)
 		end
@@ -145,5 +145,14 @@ module SimpleRRD
 				raise "Bad color specification: #{c}" 
 			end
 		end
+
+    def alpha
+      @alpha ||= 'FF'
+    end
+
+    def alpha=(a)
+      raise "Bad alpha value: #{a}" unless a.match(/\A[0-9a-fA-F]{2,2}\Z/)
+      @alpha = a
+    end
 	end
 end

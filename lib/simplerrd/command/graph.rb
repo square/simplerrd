@@ -126,7 +126,7 @@ module SimpleRRD
 			raise "Data required but not set" unless data
 			raise "Text specified, but color set to :invisible" if text and color == :invisible
 			ret = "LINE#{width}:#{data.vname}"
-			ret << "\##{color}" unless color == :invisible
+			ret << "\##{color}#{alpha}" unless color == :invisible
 			ret << ":#{text}" if text
 			ret << ":STACK" if stack
 			return ret
@@ -143,6 +143,7 @@ module SimpleRRD
 
 		def initialize(opts = {})
 			@stack = false
+      @alpha = nil
 			call_hash_methods(opts)
 		end
 		
@@ -156,7 +157,7 @@ module SimpleRRD
 			raise "Data required but not set" unless data
 			raise "Text specified, but color set to :invisible" if text and color == :invisible
 			ret = "AREA:#{data.vname}"
-			ret << "\##{color}" unless color == :invisible
+			ret << "\##{color}#{alpha}" unless color == :invisible
 			ret << ":#{text}" if text
 			ret << ":STACK" if stack
 			return ret

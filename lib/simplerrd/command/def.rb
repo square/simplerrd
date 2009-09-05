@@ -33,7 +33,6 @@ module SimpleRRD
     #    DEF:ds0weekly=router.rrd:ds0:AVERAGE:start=11\:00:end=start+1h
     
     include VName
-    include HashToMethods
 
     def initialize(opts = {})
       @rrdfile      = nil
