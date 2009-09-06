@@ -5,33 +5,6 @@ module SimpleRRD
       return Def.new(defaults.merge(opts))
     end
 
-    def plot(data, text = "")
-      max_val = VDef.new(:rpn_expression => [data, 'MAXIMUM'])
-      min_val = VDef.new(:rpn_expression => [data, 'MINIMUM'])
-      avg_val = VDef.new(:rpn_expression => [data, 'AVERAGE'])
-
-      max_text = GPrint.new(:value => max_val, :text => "Maximum: %8.2lf%s")
-      min_text = GPrint.new(:value => max_val, :text => "Minimum: %8.2lf%s")
-      avg_text = GPrint.new(:value => max_val, :text => "Average: %8.2lf%s")
-
-      line_break = Comment.new(:text => "\\n")
-      spacer     = Comment.new(:text => "\\s")
-
-      color = color_scheme.next
-      line = Line.new(:data => data, :text => text,
-                      :width => 2,   :color => color)
-      area = Area.new(:data => data, :color => color,
-                      :alpha => '66')
-
-      add_element(area)
-      add_element(line)
-      add_element(min_text)
-      add_element(max_text)
-      add_element(avg_text)
-      add_element(line_break)
-#      add_element(spacer)
-    end
-
     def color_scheme(val = nil)
       return @color_scheme = val if val
       return @color_scheme ||= DEFAULT_COLORS
@@ -40,5 +13,64 @@ module SimpleRRD
     def color_scheme=(c)
       @color_scheme = c
     end
+
+		def line_break
+			return Comment.new(:text => "\\n")
+		end
+
+		def spacer
+			return Comment.new(:text => "\\s")
+		end
+
+		def summary_elements(data)
+      max_val = VDef.new(:rpn_expression => [data, 'MAXIMUM'])
+      min_val = VDef.new(:rpn_expression => [data, 'MINIMUM'])
+      avg_val = VDef.new(:rpn_expression => [data, 'AVERAGE'])
+
+      max_text = GPrint.new(:value => max_val, :text => "Maximum: %8.2lf%s")
+      min_text = GPrint.new(:value => max_val, :text => "Minimum: %8.2lf%s")
+      avg_text = GPrint.new(:value => max_val, :text => "Average: %8.2lf%s")
+
+			return [min_text, max_text, avg_text]
+		end
+
+    def plot(data, text = "")
+      color = color_scheme.next
+      line = Line.new(:data => data, :text => text,
+                      :width => 2,   :color => color)
+      area = Area.new(:data => data, :color => color,
+                      :alpha => '66')
+
+      add_element(area)
+      add_element(line)
+			summary_elements(data).each do |elt|
+				add_element(elt)
+			end
+      add_element(line_break)
+    end
+
+		def stack_plot(*elements)
+			stack_height = nil
+			elements.each do |ary|
+				(data, text) = ary
+				color = color_scheme.next
+				if stack_height
+					stack_height = CDef.new(:rpn_expression => [stack_height,data,'+'])
+				else
+					stack_height = data
+				end
+				area = Area.new(:data => data, :color => color,
+												:alpha => '66', :stack => true)
+				line = Line.new(:data => stack_height, :text => text,
+												:width => 2,   :color => color)
+				add_element(area)
+				add_element(line)
+				summary_elements(data).each do |elt|
+					add_element(elt)
+				end
+				add_element(line_break)
+			end
+			add_element(line_break)
+		end
   end
 end

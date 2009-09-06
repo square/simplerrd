@@ -5,7 +5,7 @@ require 'simplerrd'
 include SimpleRRD
 
 graph = FancyGraph.build do
-  title   "Fancy line graph"
+  title   "Fancy stacked graph"
 
   width    640
   height   240
@@ -16,9 +16,9 @@ graph = FancyGraph.build do
   free    = data('data/mem/free.rrd')
   cache   = data('data/mem/cache.rrd')
 
-  plot buffers, "Used buffers" # pick color by default, set opacity to 50-80%
-  plot free,    "Free space  "
-  plot cache,   "Cache used  "
+  stack_plot([buffers, "Used buffers"], 
+						 [free,    "Free space  "],
+  					 [cache,   "Cache used  "])
 end
 
-graph.generate('fancy_lines.png')
+graph.generate('fancy_stack.png')
