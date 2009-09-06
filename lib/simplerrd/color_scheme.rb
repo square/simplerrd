@@ -14,13 +14,10 @@ module SimpleRRD
   end
 
   # a selection of colors from http://colorbrewer2.org/
-  DEFAULT_COLORS = ColorScheme.new("377EB8",
-                                   "4DAF4A",
-                                   "984EA3",
-                                   "FF7F00",
-                                   "FFFF33",
-                                   "E41A1C",
-                                   "A65628",
-                                   "F781BF",
-                                   "999999" )
+  DEFAULT_COLORS = ColorScheme.new("1F78B4", # blue
+                                   "33A02C", # green
+                                   "FF7F00", # orange
+                                   "6A3D9A", # purple
+                                   "E31A1C", # red
+                                   "B15928") # brown
 end

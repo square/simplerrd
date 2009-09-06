@@ -7,9 +7,10 @@ include SimpleRRD
 graph = FancyGraph.build do
   title   "Fancy graph"
 
-  width   640
-  height  240
-  end_at  Time.at(1252107236)
+  width    640
+  height   240
+  end_at   Time.at(1252107236)
+  start_at Time.at(1252107236) - (60*60*60*6)
 
   buffers = data('data/mem/buffers.rrd') # ds_name and cf implied
   free    = data('data/mem/free.rrd')

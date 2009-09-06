@@ -14,7 +14,8 @@ module SimpleRRD
       min_text = GPrint.new(:value => max_val, :text => "Minimum: %8.2lf%s")
       avg_text = GPrint.new(:value => max_val, :text => "Average: %8.2lf%s")
 
-      spacer = Comment.new(:text => "\\s")
+      line_break = Comment.new(:text => "\\n")
+      spacer     = Comment.new(:text => "\\s")
 
       color = color_scheme.next
       line = Line.new(:data => data, :text => text,
@@ -25,9 +26,10 @@ module SimpleRRD
       add_element(area)
       add_element(line)
       add_element(min_text)
-      add_element(avg_text)
       add_element(max_text)
-      add_element(spacer)
+      add_element(avg_text)
+      add_element(line_break)
+#      add_element(spacer)
     end
 
     def color_scheme(val = nil)
