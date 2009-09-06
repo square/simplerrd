@@ -28,7 +28,7 @@ free_avg = SimpleRRD::VDef.new(:rpn_expression => [free, 'AVERAGE'])
 free_min = SimpleRRD::VDef.new(:rpn_expression => [free, 'MINIMUM'])
 
 stacked_free = SimpleRRD::CDef.new(:rpn_expression => [buffers,free,'+'])
-free_line = SimpleRRD::Line.new(:data => stacked_free, :text => "Free memory ", :width => 2, :color => '33A02C')
+free_line = SimpleRRD::Line.new(:data => stacked_free, :text => "Free space  ", :width => 2, :color => '33A02C')
 free_area = SimpleRRD::Area.new(:data => free, :color => 'B2DF8A', :alpha => 'CC', :stack => true)
 
 free_max_text = SimpleRRD::GPrint.new(:value => free_max, :text => "Maximum: %8.2lf%s")
@@ -40,14 +40,14 @@ cache_avg = SimpleRRD::VDef.new(:rpn_expression => [cache, 'AVERAGE'])
 cache_min = SimpleRRD::VDef.new(:rpn_expression => [cache, 'MINIMUM'])
 
 stacked_cache = SimpleRRD::CDef.new(:rpn_expression => [stacked_free,cache,'+'])
-cache_line = SimpleRRD::Line.new(:data => stacked_cache, :text => "Used cache  ", :width => 2, :color => '1F78B4')
+cache_line = SimpleRRD::Line.new(:data => stacked_cache, :text => "Cache used  ", :width => 2, :color => '1F78B4')
 cache_area = SimpleRRD::Area.new(:data => cache, :color => 'A6CEE3', :alpha => 'CC', :stack => true)
 
 cache_max_text = SimpleRRD::GPrint.new(:value => cache_max, :text => "Maximum: %8.2lf%s")
 cache_avg_text = SimpleRRD::GPrint.new(:value => cache_avg, :text => "Average: %8.2lf%s")
 cache_min_text = SimpleRRD::GPrint.new(:value => cache_min, :text => "Minimum: %8.2lf%s")
 
-line_break = SimpleRRD::Comment.new(:text => '\n')
+line_break = SimpleRRD::Comment.new(:text => "\\n")
 
 graph = SimpleRRD::Graph.new
 

@@ -5,18 +5,20 @@ module SimpleRRD
     ALLOWED_FORMATS=["SVG", "PNG", "EPS", "PDF"]
 
     def initialize(opts={})
-      @start_at = nil
-      @end_at   = nil
-      @title    = nil
-      @width    = nil
-      @height   = nil
-      @format   = nil
-      @elements = []
+      @start_at    = nil
+      @end_at      = nil
+      @title       = nil
+      @width       = nil
+      @height      = nil
+      @format      = nil
+      @lower_limit = 0
+      @upper_limit = nil
+      @elements    = []
 
       call_hash_methods(opts)
     end
 
-    attr_reader :start_at, :end_at, :title, :width, :height, :format, :elements
+    attr_reader :elements
 
     def start_at(val=nil)
       return self.start_at=val if val
@@ -67,6 +69,26 @@ module SimpleRRD
       raise "Bad height" unless h > 0
     end
 
+    def lower_limit(val=nil)
+      return @lower_limit = val if val
+      return @lower_limit
+    end
+
+    def lower_limit=(val)
+      raise "Lower limit should be a number (or nil); got #{val}" if val && !val.is_a?(Numeric)
+      @lower_limit = val
+    end
+
+    def upper_limit(val=nil)
+      return @upper_limit = val if val
+      return @upper_limit
+    end
+
+    def upper_limit=(val)
+      raise "Upper limit should be a number (or nil); got #{val}" if val && !val.is_a?(Numeric)
+      @upper_limit = val
+    end
+
     def format(val=nil)
       return self.format=val if val
       return @format
@@ -103,6 +125,8 @@ module SimpleRRD
       else
         flags.concat(['--end', 'now'])
       end
+      flags.concat(['--lower-limit', @lower_limit.to_s]) unless @lower_limit.nil?
+      flags.concat(['--upper-limit', @lower_limit.to_s]) unless @upper_limit.nil?
       flags.concat(['--title', @title]) if @title
       flags.concat(['--width', @width.to_s]) if @width
       flags.concat(['--height', @height.to_s]) if @height
