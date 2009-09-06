@@ -18,9 +18,19 @@ module SimpleRRD
 
     attr_reader :start_at, :end_at, :title, :width, :height, :format, :elements
 
+    def start_at(val=nil)
+      return self.start_at=val if val
+      return @start_at
+    end
+
     def start_at=(t)
       raise "Expected Time; got " + t.class.to_s unless t.is_a?(Time)
       @start_at = t
+    end
+
+    def end_at(val=nil)
+      return self.end_at=val if val
+      return @end_at
     end
 
     def end_at=(t)
@@ -28,8 +38,18 @@ module SimpleRRD
       @end_at = t
     end
     
+    def title(val=nil)
+      return self.title=val if val
+      return @title
+    end
+
     def title=(s)
       @title = s.to_s
+    end
+
+    def width(val=nil)
+      return self.width=val if val
+      return @width
     end
 
     def width=(w)
@@ -37,9 +57,19 @@ module SimpleRRD
       raise "Bad width" unless w > 0
     end
 
+    def height(val=nil)
+      return self.height=val if val
+      return @height
+    end
+
     def height=(h)
       @height = h.to_i
       raise "Bad height" unless h > 0
+    end
+
+    def format(val=nil)
+      return self.format=val if val
+      return @format
     end
 
     def format=(f)
@@ -93,6 +123,12 @@ module SimpleRRD
       cmd.concat(command_flags)
       cmd.concat(command_expressions)
       Runner.run(*cmd)
+    end
+
+    def self.build(&b)
+      ret = self.new
+      ret.instance_eval(&b)
+      return ret
     end
   end
 end

@@ -138,4 +138,25 @@ describe "SimpleRRD::Graph" do
 
     @g.generate.should == 'ok'
   end
+
+  it "should have a builder method .build" do
+    e = Time.now
+    s = e - 3600
+
+    a = SimpleRRD::Graph.build do
+      start_at s
+      end_at   e
+      title    "EXAMPLE"
+      width    640
+      height   480
+      format   "SVG"
+    end
+    
+    a.start_at.should == s
+    a.end_at.should == e
+    a.title.should == 'EXAMPLE'
+    a.width.should == 640
+    a.height.should == 480
+    a.format.should == 'SVG'
+  end
 end
