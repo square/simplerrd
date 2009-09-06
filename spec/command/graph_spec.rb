@@ -80,6 +80,7 @@ describe "SimpleRRD::Line" do
 		SimpleRRD::Line.new(:data => val, :color => 'DEADBF').definition.should == "LINE1:data\#DEADBFFF"
 		SimpleRRD::Line.new(:data => val, :color => :invisible).definition.should == "LINE1:data"
 		SimpleRRD::Line.new(:data => val, :width => 5).definition.should == "LINE5:data\#FFFFFFFF"
+		SimpleRRD::Line.new(:data => val, :stack => true).definition.should == "LINE1:data\#FFFFFFFF::STACK"
 		SimpleRRD::Line.new(:data => val, :text => 'lozenges/sec').definition.should == "LINE1:data\#FFFFFFFF:lozenges/sec"
 		SimpleRRD::Line.new(:data => val, :color => "AABBCC", 
 				 							  :width => 10, :text => 'RALPH', 
@@ -116,6 +117,7 @@ describe "SimpleRRD::Area" do
 		SimpleRRD::Area.new(:data => val).definition.should == "AREA:data\#FFFFFFFF"
 		SimpleRRD::Area.new(:data => val, :color => 'DEADBF').definition.should == "AREA:data\#DEADBFFF"
 		SimpleRRD::Area.new(:data => val, :color => :invisible).definition.should == "AREA:data"
+		SimpleRRD::Area.new(:data => val, :stack => true).definition.should == "AREA:data\#FFFFFFFF::STACK"
 		SimpleRRD::Area.new(:data => val, :text => 'lozenges/sec').definition.should == "AREA:data\#FFFFFFFF:lozenges/sec"
 		SimpleRRD::Area.new(:data => val, :color => "AABBCC", :text => 'RALPH', 
 												:stack=>true).definition.should == "AREA:data\#AABBCCFF:RALPH:STACK"

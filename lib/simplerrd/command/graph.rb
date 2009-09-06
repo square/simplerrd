@@ -127,8 +127,12 @@ module SimpleRRD
 			raise "Text specified, but color set to :invisible" if text and color == :invisible
 			ret = "LINE#{width}:#{data.vname}"
 			ret << "\##{color}#{alpha}" unless color == :invisible
-			ret << ":#{text}" if text
-			ret << ":STACK" if stack
+      if text
+        ret << ":#{text}"
+        ret << ":STACK" if stack
+      elsif stack
+        ret << "::STACK" 
+      end
 			return ret
 		end
 	end
@@ -158,8 +162,12 @@ module SimpleRRD
 			raise "Text specified, but color set to :invisible" if text and color == :invisible
 			ret = "AREA:#{data.vname}"
 			ret << "\##{color}#{alpha}" unless color == :invisible
-			ret << ":#{text}" if text
-			ret << ":STACK" if stack
+      if text
+        ret << ":#{text}"
+        ret << ":STACK" if stack
+      elsif stack
+        ret << "::STACK" 
+      end
 			return ret
 		end
 	end
