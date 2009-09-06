@@ -21,4 +21,4 @@ graph = FancyGraph.build do
   plot cache,   "Cache used  "
 end
 
-graph.generate('dsl_mem.png')
+graph.generate('fancy_lines.png')
