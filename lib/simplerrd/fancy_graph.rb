@@ -22,6 +22,10 @@ module SimpleRRD
 			return Comment.new(:text => "\\s")
 		end
 
+    def compact
+      return !(height && height > 200)
+    end
+
 		def summary_elements(data)
       max_val = VDef.new(:rpn_expression => [data, 'MAXIMUM'])
       min_val = VDef.new(:rpn_expression => [data, 'MINIMUM'])
@@ -43,10 +47,10 @@ module SimpleRRD
 
       add_element(area)
       add_element(line)
-			summary_elements(data).each do |elt|
-				add_element(elt)
-			end
-      add_element(line_break)
+      unless compact
+        summary_elements(data).each { |e| add_element(e) } unless compact
+        add_element(line_break)
+      end
     end
 
 		def stack_plot(*elements)
@@ -65,10 +69,10 @@ module SimpleRRD
 												:width => 2,   :color => color)
 				add_element(area)
 				add_element(line)
-				summary_elements(data).each do |elt|
-					add_element(elt)
-				end
-				add_element(line_break)
+        unless compact
+          summary_elements(data).each { |e| add_element(e) } unless compact
+          add_element(line_break)
+        end
 			end
 			add_element(line_break)
 		end
