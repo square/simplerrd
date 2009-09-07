@@ -130,6 +130,7 @@ module SimpleRRD
       flags.concat(['--title', @title]) if @title
       flags.concat(['--width', @width.to_s]) if @width
       flags.concat(['--height', @height.to_s]) if @height
+      flags.concat(['--full-size-mode']) if @width or @height
       flags.concat(['--imgformat', @format]) if @format
       return flags
     end

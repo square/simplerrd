@@ -96,6 +96,7 @@ describe "SimpleRRD::Graph" do
                                 '--title', "MY GRAF",
                                 '--width', '640',
                                 '--height', '480',
+                                '--full-size-mode',
                                 '--imgformat', 'PNG']
   end
 
@@ -145,6 +146,7 @@ describe "SimpleRRD::Graph" do
                         '--title', "MY GRAF",
                         '--width', '640',
                         '--height', '480',
+                        '--full-size-mode',
                         '--imgformat', 'PNG',
                         'DEF:blah:bloo',
                         'LINE:foo:bar']
