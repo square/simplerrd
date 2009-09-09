@@ -27,6 +27,7 @@ module SimpleRRD
 
     def start_at=(t)
       raise "Expected Time; got " + t.class.to_s unless t.is_a?(Time)
+      raise "Start must be before end" if end_at and end_at < t
       @start_at = t
     end
 
@@ -37,6 +38,7 @@ module SimpleRRD
 
     def end_at=(t)
       raise "Expected Time; got " + t.class.to_s unless t.is_a?(Time)
+      raise "End must be after start" if start_at and start_at > t
       @end_at = t
     end
     

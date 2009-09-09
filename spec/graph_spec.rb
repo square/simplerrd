@@ -19,6 +19,16 @@ describe "SimpleRRD::Graph" do
     lambda { @g.start_at="hello" }.should raise_error
     lambda { @g.end_at="hello" }.should raise_error
   end
+
+  it "should raise an exception if start is after end" do
+    later   = Time.now
+    earlier = later - 3600
+    @g.start_at = later
+    lambda { @g.end_at = earlier }.should raise_error
+    h = SimpleRRD::Graph.new
+    h.end_at = earlier
+    lambda { h.start_at = later }.should raise_error
+  end
   
   it "should (only) allow setting of a string as a title" do
     @g.title = "A TITLE"
