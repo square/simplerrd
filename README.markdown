@@ -56,7 +56,7 @@ and
     
     graph.generate('fancy_stack.png')
 
-![fancy_stacked.png](http://www.emerose.com/files/simplerrd/fancy_stacked.png)
+![fancy_stacked.png](http://www.emerose.com/files/simplerrd/fancy_stack.png)
 
 ## More information
 
