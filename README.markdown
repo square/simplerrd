@@ -33,7 +33,7 @@ syntax with Ruby objects for those who want more control.
 
 Will produce:
 
-![fancy_lines.png][http://www.emerose.com/files/simplerrd/fancy_lines.png]
+![fancy_lines.png](http://www.emerose.com/files/simplerrd/fancy_lines.png)
 
 and
 
@@ -56,7 +56,7 @@ and
     
     graph.generate('fancy_stack.png')
 
-![fancy_stacked.png][http://www.emerose.com/files/simplerrd/fancy_stacked.png]
+![fancy_stacked.png](http://www.emerose.com/files/simplerrd/fancy_stacked.png)
 
 ## More information
 
