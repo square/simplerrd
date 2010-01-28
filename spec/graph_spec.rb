@@ -102,7 +102,6 @@ describe "SimpleRRD::Graph" do
 
     @g.command_flags.should == ['--start', s.to_i.to_s,
                                 '--end',   e.to_i.to_s,
-                                '--lower-limit', '0',
                                 '--title', "MY GRAF",
                                 '--width', '640',
                                 '--height', '480',
@@ -110,8 +109,8 @@ describe "SimpleRRD::Graph" do
                                 '--imgformat', 'PNG']
   end
 
-  it "should default to 'now' for unspecified end times, '0' for lower limit, and leave all other unspecified values off" do
-    @g.command_flags.should == ['--end', 'now', '--lower-limit', '0']
+  it "should default to 'now' for unspecified end times and leave all other unspecified values off" do
+    @g.command_flags.should == ['--end', 'now']
   end
 
   it "#command_expressions should return the definition of all of the graph's dependencies" do
@@ -152,7 +151,6 @@ describe "SimpleRRD::Graph" do
     expected_command = ['rrdtool', 'graph', '-',
                         '--start', s.to_i.to_s,
                         '--end',   e.to_i.to_s,
-                        '--lower-limit', '0',
                         '--title', "MY GRAF",
                         '--width', '640',
                         '--height', '480',

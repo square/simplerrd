@@ -11,7 +11,7 @@ module SimpleRRD
       @width       = nil
       @height      = nil
       @format      = nil
-      @lower_limit = 0
+      @lower_limit = nil
       @upper_limit = nil
       @elements    = []
 
