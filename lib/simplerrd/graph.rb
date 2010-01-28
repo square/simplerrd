@@ -59,8 +59,9 @@ module SimpleRRD
     end
 
     def width=(w)
-      @width = w.to_i
+      w = w.to_i
       raise "Bad width" unless w > 0
+      return @width = w
     end
 
     def height(val=nil)
@@ -69,8 +70,9 @@ module SimpleRRD
     end
 
     def height=(h)
-      @height = h.to_i
+      h=h.to_i
       raise "Bad height" unless h > 0
+      return @height = h
     end
 
     def lower_limit(val=nil)
