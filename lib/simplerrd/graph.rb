@@ -128,7 +128,7 @@ module SimpleRRD
         flags.concat(['--end', 'now'])
       end
       flags.concat(['--lower-limit', @lower_limit.to_s]) unless @lower_limit.nil?
-      flags.concat(['--upper-limit', @lower_limit.to_s]) unless @upper_limit.nil?
+      flags.concat(['--upper-limit', @upper_limit.to_s]) unless @upper_limit.nil?
       flags.concat(['--title', @title]) if @title
       flags.concat(['--width', @width.to_s]) if @width
       flags.concat(['--height', @height.to_s]) if @height

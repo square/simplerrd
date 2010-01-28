@@ -32,8 +32,8 @@ module SimpleRRD
       avg_val = VDef.new(:rpn_expression => [data, 'AVERAGE'])
 
       max_text = GPrint.new(:value => max_val, :text => "Maximum: %8.2lf%s")
-      min_text = GPrint.new(:value => max_val, :text => "Minimum: %8.2lf%s")
-      avg_text = GPrint.new(:value => max_val, :text => "Average: %8.2lf%s")
+      min_text = GPrint.new(:value => min_val, :text => "Minimum: %8.2lf%s")
+      avg_text = GPrint.new(:value => avg_val, :text => "Average: %8.2lf%s")
 
 			return [min_text, max_text, avg_text]
 		end
