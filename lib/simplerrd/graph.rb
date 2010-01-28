@@ -14,6 +14,7 @@ module SimpleRRD
       @lower_limit = nil
       @upper_limit = nil
       @exponent    = nil
+      @rigid       = nil
       @elements    = []
 
       call_hash_methods(opts)
@@ -73,27 +74,38 @@ module SimpleRRD
     end
 
     def lower_limit(val=nil)
-      return @lower_limit = val if val
+      return self.lower_limit = val if val
       return @lower_limit
     end
 
     def lower_limit=(val)
       raise "Lower limit should be a number (or nil); got #{val}" if val && !val.is_a?(Numeric)
       @lower_limit = val
+      self.rigid = true if self.rigid.nil?
     end
 
     def upper_limit(val=nil)
-      return @upper_limit = val if val
+      return self.upper_limit = val if val
       return @upper_limit
     end
 
     def upper_limit=(val)
       raise "Upper limit should be a number (or nil); got #{val}" if val && !val.is_a?(Numeric)
       @upper_limit = val
+      self.rigid = true if self.rigid.nil?
+    end
+
+    def rigid(val=nil)
+      return self.rigid = val unless (val.nil?)
+      return @rigid
+    end
+
+    def rigid=(val)
+      @rigid = (not (val == false))
     end
 
     def exponent(val=nil)
-      return @exponent = val if val
+      return self.exponent = val if val
       return @exponent
     end
 
@@ -140,6 +152,7 @@ module SimpleRRD
       end
       flags.concat(['--lower-limit', @lower_limit.to_s]) unless @lower_limit.nil?
       flags.concat(['--upper-limit', @upper_limit.to_s]) unless @upper_limit.nil?
+      flags.concat(['--rigid']) if @rigid
       flags.concat(['--units-exponent', @exponent.to_s]) unless @exponent.nil?
       flags.concat(['--title', @title]) if @title
       flags.concat(['--width', @width.to_s]) if @width

@@ -61,6 +61,26 @@ describe "SimpleRRD::Graph" do
     lambda { @g.upper_limit = "game" }.should raise_error
   end
 
+  it "should not set --rigid by default" do
+    @g.command_flags.should_not include '--rigid'
+  end
+
+  it "should set --rigid if asked" do
+    @g.rigid = true
+    @g.command_flags.should include '--rigid'
+  end
+  
+  it "should, ceteris paribus, set --rigid if upper_limit is set" do
+    @g.upper_limit = 100
+    @g.command_flags.should include '--rigid'
+  end
+
+  it "should not set --rigid automatically if rigid was changed manually" do
+    @g.rigid = false
+    @g.upper_limit = 100
+    @g.command_flags.should_not include '--rigid'
+  end
+
   it "should (only) allow setting allowed formats" do
     SimpleRRD::Graph::ALLOWED_FORMATS.each do |f|
       @g.format = f
@@ -111,6 +131,7 @@ describe "SimpleRRD::Graph" do
                                 '--end',   e.to_i.to_s,
                                 '--lower-limit', '0',
                                 '--upper-limit', '100',
+                                '--rigid',
                                 '--units-exponent', '10',
                                 '--title', "MY GRAF",
                                 '--width', '640',
