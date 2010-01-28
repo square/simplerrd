@@ -13,6 +13,7 @@ module SimpleRRD
       @format      = nil
       @lower_limit = nil
       @upper_limit = nil
+      @exponent    = nil
       @elements    = []
 
       call_hash_methods(opts)
@@ -91,6 +92,16 @@ module SimpleRRD
       @upper_limit = val
     end
 
+    def exponent(val=nil)
+      return @exponent = val if val
+      return @exponent
+    end
+
+    def exponent=(val)
+      raise "Exponent should be a number (or nil); got #{val}" if val && !val.is_a?(Numeric)
+      @exponent = val
+    end
+
     def format(val=nil)
       return self.format=val if val
       return @format
@@ -129,6 +140,7 @@ module SimpleRRD
       end
       flags.concat(['--lower-limit', @lower_limit.to_s]) unless @lower_limit.nil?
       flags.concat(['--upper-limit', @upper_limit.to_s]) unless @upper_limit.nil?
+      flags.concat(['--units-exponent', @exponent.to_s]) unless @exponent.nil?
       flags.concat(['--title', @title]) if @title
       flags.concat(['--width', @width.to_s]) if @width
       flags.concat(['--height', @height.to_s]) if @height

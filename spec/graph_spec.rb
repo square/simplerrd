@@ -37,6 +37,8 @@ describe "SimpleRRD::Graph" do
     @g.title.should == "1"
   end
 
+  # TODO: refactor this and the following spec away:
+  # a helper should handle the numericality assertion
   it "should (only) allow setting numeric widths/heights" do
     @g.width = 10
     @g.width.should == 10
@@ -89,6 +91,8 @@ describe "SimpleRRD::Graph" do
     deps.should include(e)
   end
 
+  # this (and the following spec) are unfortunately specific/brittle
+  # it would be nice to refactor these away.
   it "should generate appropriate commandline flags for the options set" do
     e = Time.now
     s = e - 3600
@@ -99,9 +103,15 @@ describe "SimpleRRD::Graph" do
     @g.width = 640
     @g.height = 480
     @g.format = "PNG"
+    @g.exponent = 10
+    @g.upper_limit = 100
+    @g.lower_limit = 0
 
     @g.command_flags.should == ['--start', s.to_i.to_s,
                                 '--end',   e.to_i.to_s,
+                                '--lower-limit', '0',
+                                '--upper-limit', '100',
+                                '--units-exponent', '10',
                                 '--title', "MY GRAF",
                                 '--width', '640',
                                 '--height', '480',
