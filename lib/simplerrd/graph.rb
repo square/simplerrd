@@ -15,6 +15,10 @@ module SimpleRRD
       @upper_limit = nil
       @exponent    = nil
       @rigid       = nil
+      @y_label     = nil
+      @y2_scale    = nil
+      @y2_shift    = nil
+      @y2_label    = nil
       @elements    = []
 
       call_hash_methods(opts)
@@ -130,6 +134,46 @@ module SimpleRRD
       end
     end
 
+    def y_label(val=nil)
+      return self.y_label = val if val
+      return @y_label
+    end
+
+    def y_label=(val)
+      return @y_label = val.to_s unless val.nil?
+      return @y_label = val
+    end
+
+    def y2_scale(val=nil)
+      return self.y2_scale = val if val
+      return @y2_scale
+    end
+
+    def y2_scale=(val)
+      raise "Y2 scale should be a number (or nil); got #{val}" if val && !val.is_a?(Numeric)
+      @y2_scale = val
+    end
+
+    def y2_shift(val=nil)
+      return self.y2_shift = val if val
+      return @y2_shift
+    end
+
+    def y2_shift=(val)
+      raise "Y2 shift should be a number (or nil); got #{val}" if val && !val.is_a?(Numeric)
+      @y2_shift = val
+    end
+
+    def y2_label(val=nil)
+      return self.y2_label = val if val
+      return @y2_label
+    end
+
+    def y2_label=(val)
+      return @y2_label = val.to_s unless val.nil?
+      return @y2_label = val
+    end
+
     def add_element(elt)
       raise "Expected a Command; got " + elt.class.to_s unless elt.is_a?(Command)
       @elements << elt
@@ -159,6 +203,11 @@ module SimpleRRD
       flags.concat(['--title', @title]) if @title
       flags.concat(['--width', @width.to_s]) if @width
       flags.concat(['--height', @height.to_s]) if @height
+      flags.concat(['--vertical-label', @y_label]) if @y_label
+      if @y2_scale and @y2_shift
+        flags.concat(['--right-axis', "#{y2_scale}:#{y2_shift}"])
+        flags.concat(['--right-axis-label', @y2_label.to_s]) if @height
+      end
       flags.concat(['--full-size-mode']) if @width or @height
       flags.concat(['--imgformat', @format]) if @format
       return flags
