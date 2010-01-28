@@ -58,6 +58,9 @@ and
 
 ![fancy_stacked.png](http://www.emerose.com/files/simplerrd/fancy_stack.png)
 
+A real-world example:
+![complicated_ping.png](http://www.emerose.com/files/simplerrd/complicated_ping.png)
+
 ## More information
 
 For more examples, see the `examples/` directory.  The `create_rrds.rb`
