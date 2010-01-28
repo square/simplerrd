@@ -11,7 +11,7 @@ module SimpleRRD
   DS_NAME_REGEX = /\A[a-zA-Z0-9_]{1,19}\Z/
   VNAME_REGEX   = /\A[a-zA-Z0-9\-_]{1,255}\Z/
   VDEF_FUNCTIONS = ["MAXIMUM", "MINIMUM", "AVERAGE", "STDEV", "LAST", 
-                    "FIRST", "TOTAL", "PERCENT", "LSLSLOPE", "LSLINT",
+                    "FIRST", "TOTAL", "PERCENT", "PERCENTNAN", "LSLSLOPE", "LSLINT",
                     "LSLCORREL"]
   CDEF_FUNCTIONS = ["LT", "LE", "GT", "GE", "EQ", "NE", "UN", "ISINF", "IF",
     "MIN", "MAX", "LIMIT", "+", "-", "*", "/", "%", "ADDNAN", "SIN", "COS",
