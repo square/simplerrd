@@ -1,8 +1,16 @@
 --- 
 dependencies: 
+  rake: 
+    group: 
+    - :development
+    version: = 0.8.7
+  rspec: 
+    group: 
+    - :development
+    version: = 1.3.0
   yard: 
     group: 
-    - :default
+    - :development
     version: = 0.5.8
     require: []
 
@@ -11,11 +19,15 @@ dependencies:
     - :default
     version: ">= 0"
 specs: 
+- rake: 
+    version: 0.8.7
 - bundler: 
     version: 0.9.26
+- rspec: 
+    version: 1.3.0
 - yard: 
     version: 0.5.8
-hash: bb9a7e57a07d16c0411f4b77760aa0abec069ca2
+hash: e3487ba8f1b96d18fc59da6ec202701e2c376c37
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org
