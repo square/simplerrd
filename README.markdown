@@ -50,8 +50,8 @@ and
       cache   = data('data/mem/cache.rrd')
     
       stack_plot([buffers, "Used buffers"], 
-    						 [free,    "Free space  "],
-      					 [cache,   "Cache used  "])
+                 [free,    "Free space  "],
+                 [cache,   "Cache used  "])
     end
     
     graph.generate('fancy_stack.png')

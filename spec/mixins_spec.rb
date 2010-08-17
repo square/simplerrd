@@ -60,151 +60,151 @@ describe "SimpleRRD::DependencyTracking" do
 end
 
 describe "SimpleRRD::RPNExpressionAttribute" do
-	before do
-		class TestThree 
-			include SimpleRRD::DependencyTracking
-			include SimpleRRD::RPNExpressionAttribute
+  before do
+    class TestThree 
+      include SimpleRRD::DependencyTracking
+      include SimpleRRD::RPNExpressionAttribute
 
-			def allowed_functions
-				["x", "xx", "xxx"]
-			end
-		end
+      def allowed_functions
+        ["x", "xx", "xxx"]
+      end
+    end
 
-		@t = TestThree.new
-	end
+    @t = TestThree.new
+  end
 
-	it "should have an rpn_expression that defaults to nil" do
-		@t.rpn_expression.should be_nil
-	end
+  it "should have an rpn_expression that defaults to nil" do
+    @t.rpn_expression.should be_nil
+  end
 
-	it "should require an Array be passed to #rpn_expression=" do
-		lambda { @t.rpn_expression = 1 }.should raise_error
-	end
+  it "should require an Array be passed to #rpn_expression=" do
+    lambda { @t.rpn_expression = 1 }.should raise_error
+  end
 
-	it "should clear any dependencies before setting the rpn expression" do
-		@t.should_receive(:clear_dependencies)
-		@t.rpn_expression=[1,2]
-	end
+  it "should clear any dependencies before setting the rpn expression" do
+    @t.should_receive(:clear_dependencies)
+    @t.rpn_expression=[1,2]
+  end
 
-	it "should throw an error if a term is not expected" do
-		lambda { @t.rpn_expression=[1,Time.now] }.should raise_error
-	end
+  it "should throw an error if a term is not expected" do
+    lambda { @t.rpn_expression=[1,Time.now] }.should raise_error
+  end
 
-	it "should (only) throw an error if the function is not allowed" do
-		lambda { @t.rpn_expression=[1,2,"yyy"] }.should raise_error
-		lambda { @t.rpn_expression=[1,2,"xxx"] }.should_not raise_error
-	end
+  it "should (only) throw an error if the function is not allowed" do
+    lambda { @t.rpn_expression=[1,2,"yyy"] }.should raise_error
+    lambda { @t.rpn_expression=[1,2,"xxx"] }.should_not raise_error
+  end
 
-	it "should add any ?Def in the expression to the dependencies" do
-		d  = SimpleRRD::Def.new
-		vd = SimpleRRD::VDef.new
-		cd = SimpleRRD::CDef.new
+  it "should add any ?Def in the expression to the dependencies" do
+    d  = SimpleRRD::Def.new
+    vd = SimpleRRD::VDef.new
+    cd = SimpleRRD::CDef.new
 
-		@t.should_receive(:add_dependency).with(d)
-		@t.should_receive(:add_dependency).with(vd)
-		@t.should_receive(:add_dependency).with(cd)
+    @t.should_receive(:add_dependency).with(d)
+    @t.should_receive(:add_dependency).with(vd)
+    @t.should_receive(:add_dependency).with(cd)
 
-		@t.rpn_expression=[1,2,d,vd,cd,'xxx','x','xx']
-	end
+    @t.rpn_expression=[1,2,d,vd,cd,'xxx','x','xx']
+  end
 end
 
 describe "SimpleRRD::TextAttribute" do
-	before do
-		class TestFour
-			include SimpleRRD::TextAttribute
-		end
+  before do
+    class TestFour
+      include SimpleRRD::TextAttribute
+    end
 
-		@t = TestFour.new
-	end
-	it "should raise an exception if the text string contains \\:" do
-		lambda { @t.text='foo\:poo' }.should raise_error
-	end
+    @t = TestFour.new
+  end
+  it "should raise an exception if the text string contains \\:" do
+    lambda { @t.text='foo\:poo' }.should raise_error
+  end
 
-	it "should escape colons with a \\" do
-		@t.text = 'foo: boo'
-		@t.text == 'foo\: boo'
-	end
+  it "should escape colons with a \\" do
+    @t.text = 'foo: boo'
+    @t.text == 'foo\: boo'
+  end
 end
 
 describe "SimpleRRD::ValueAttribute" do
-	before do
-		class TestFive
-			include SimpleRRD::DependencyTracking
-			include SimpleRRD::ValueAttribute
-		end
-		@t = TestFive.new
-		@vd = SimpleRRD::VDef.new
-	end
+  before do
+    class TestFive
+      include SimpleRRD::DependencyTracking
+      include SimpleRRD::ValueAttribute
+    end
+    @t = TestFive.new
+    @vd = SimpleRRD::VDef.new
+  end
 
-	it "should (only) allow a VDef to be stored as the value" do
-		@t.value = @vd
-		@t.value.should == @vd
+  it "should (only) allow a VDef to be stored as the value" do
+    @t.value = @vd
+    @t.value.should == @vd
 
-		lambda { @t.value = 123 }.should raise_error
-	end
+    lambda { @t.value = 123 }.should raise_error
+  end
 
-	it "should have the vdef in value as a dependency" do
-		@t.value = @vd
-		@t.dependencies.should include(@vd)
-	end
+  it "should have the vdef in value as a dependency" do
+    @t.value = @vd
+    @t.dependencies.should include(@vd)
+  end
 end
 
 describe "SimpleRRD::DataAttribute" do
-	before do
-		class TestFivePointFive
-			include SimpleRRD::DependencyTracking
-			include SimpleRRD::DataAttribute
-		end
-		@t = TestFivePointFive.new
-		@d = SimpleRRD::Def.new
-		@cd = SimpleRRD::CDef.new
-	end
+  before do
+    class TestFivePointFive
+      include SimpleRRD::DependencyTracking
+      include SimpleRRD::DataAttribute
+    end
+    @t = TestFivePointFive.new
+    @d = SimpleRRD::Def.new
+    @cd = SimpleRRD::CDef.new
+  end
 
-	it "should allow a Def to be stored as the data" do
-		@t.data = @d
-		@t.data.should == @d
-	end
+  it "should allow a Def to be stored as the data" do
+    @t.data = @d
+    @t.data.should == @d
+  end
 
-	it "should allow a CDef to be stored as the data" do
-		@t.data = @cd
-		@t.data.should == @cd
-	end
+  it "should allow a CDef to be stored as the data" do
+    @t.data = @cd
+    @t.data.should == @cd
+  end
 
-	it "should not allow anything else to be stored as the data" do
-		lambda { @t.value = 123 }.should raise_error
-	end
+  it "should not allow anything else to be stored as the data" do
+    lambda { @t.value = 123 }.should raise_error
+  end
 
-	it "should have the ?def in data as a dependency" do
-		@t.data = @d
-		@t.dependencies.should include(@d)
-		@t.data = @cd
-		@t.dependencies.should include(@cd)
-	end
+  it "should have the ?def in data as a dependency" do
+    @t.data = @d
+    @t.dependencies.should include(@d)
+    @t.data = @cd
+    @t.dependencies.should include(@cd)
+  end
 end
 
 describe "SimpleRRD::ColorAttribute" do
-	before do
-		class TestSix
-			include SimpleRRD::ColorAttribute
-		end
-		@t = TestSix.new
-	end
+  before do
+    class TestSix
+      include SimpleRRD::ColorAttribute
+    end
+    @t = TestSix.new
+  end
 
-	it "should (only) allow setting reasonable hex RGB values in #color=" do
-		@t.color = "AABBCC"
-		@t.color.should == "AABBCC"
-		lambda { @t.color = "food" }.should raise_error
-		lambda { @t.color = "1234567" }.should raise_error
-	end
+  it "should (only) allow setting reasonable hex RGB values in #color=" do
+    @t.color = "AABBCC"
+    @t.color.should == "AABBCC"
+    lambda { @t.color = "food" }.should raise_error
+    lambda { @t.color = "1234567" }.should raise_error
+  end
 
-	it "should default to black" do
-		@t.color.should == "FFFFFF"
-	end
+  it "should default to black" do
+    @t.color.should == "FFFFFF"
+  end
 
-	it "should allow color to be set to :invisible" do
-		@t.color = :invisible
-		@t.color.should == :invisible
-	end
+  it "should allow color to be set to :invisible" do
+    @t.color = :invisible
+    @t.color.should == :invisible
+  end
 
   it "should (only) allow setting hex opacity values with #alpha=" do
     @t.alpha = "AA"

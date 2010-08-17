@@ -34,9 +34,9 @@ describe "SimpleRRD::CDef" do
     @c.rpn_expression = [d,5,"MAX"]
     @c.dependencies.should == [d]
 
-		oc = SimpleRRD::CDef.new
-		@c.rpn_expression = [oc,5,"MAX"]
-		@c.dependencies.should == [oc]
+    oc = SimpleRRD::CDef.new
+    @c.rpn_expression = [oc,5,"MAX"]
+    @c.dependencies.should == [oc]
   end
 
   it "should raise an exception if #definition is called without a required variable set" do
@@ -45,9 +45,9 @@ describe "SimpleRRD::CDef" do
 
   it "should return the correct definition when #definition is called" do
     d = SimpleRRD::Def.new
-		d.vname = 'ds0'
-		@c.vname = 'woot'
+    d.vname = 'ds0'
+    @c.vname = 'woot'
     @c.rpn_expression = [d,5,"MAX"]
-		@c.definition.should == 'CDEF:woot=ds0,5,MAX'
+    @c.definition.should == 'CDEF:woot=ds0,5,MAX'
   end
 end

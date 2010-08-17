@@ -2,9 +2,9 @@
 module SimpleRRD
   # useful for setting options in a hash passed to the constructor
   module OptionsHash
-		def initialize(opts = {})
-			call_hash_methods(opts)
-		end
+    def initialize(opts = {})
+      call_hash_methods(opts)
+    end
 
     def call_hash_methods(hsh)
       hsh.keys.each do |k|
@@ -13,8 +13,8 @@ module SimpleRRD
     end
   end
 
-	# contains the structures necessary to track dependencies
-	# (eg, between RRD commands)
+  # contains the structures necessary to track dependencies
+  # (eg, between RRD commands)
   module DependencyTracking
     def dependencies
       @dependencies ||= []
@@ -32,36 +32,36 @@ module SimpleRRD
       end
       return all_deps.uniq # horribly ineffecient. sigh.
     end
-		
-		def clear_dependencies
-			@dependencies = []
-		end
+    
+    def clear_dependencies
+      @dependencies = []
+    end
   end
 
-	# common stuff to setting and getting RPN expression vnames
-	module VName
-		def vname
-			@vname ||= "obj#{self.object_id}"
-		end
+  # common stuff to setting and getting RPN expression vnames
+  module VName
+    def vname
+      @vname ||= "obj#{self.object_id}"
+    end
 
     def vname=(n)
       raise "Bad vname: #{n}" unless n.match(VNAME_REGEX)
       @vname = n
     end
-	end
+  end
 
-	# handles getting and setting RPN expressions
-	# note that almost no sanity checks are performed: it's 
-	# up to you to make sensible expressions...
-	module RPNExpressionAttribute 
-		def rpn_expression 
-			@rpn_expression ||= nil
-		end
+  # handles getting and setting RPN expressions
+  # note that almost no sanity checks are performed: it's 
+  # up to you to make sensible expressions...
+  module RPNExpressionAttribute 
+    def rpn_expression 
+      @rpn_expression ||= nil
+    end
 
     def rpn_expression=(ary)
       raise "Expected Array of RPN terms; got " + ary.class.to_s unless ary.is_a? Array
-			clear_dependencies 
-			ary.each do |term|
+      clear_dependencies 
+      ary.each do |term|
         case term
         when Numeric: 
           next
@@ -96,55 +96,55 @@ module SimpleRRD
       end
       return terms.join(",")
     end
-	end
+  end
 
-	module TextAttribute
-		def text
-			@text ||= nil
-		end
+  module TextAttribute
+    def text
+      @text ||= nil
+    end
 
-		def text=(t)
-			raise "Strings containing \\: are not supported" if t.include?('\:')
-			@text = t.gsub(':', '\:')
-		end
-	end
+    def text=(t)
+      raise "Strings containing \\: are not supported" if t.include?('\:')
+      @text = t.gsub(':', '\:')
+    end
+  end
 
-	module ValueAttribute
-		def value
-			@value ||= nil
-		end
+  module ValueAttribute
+    def value
+      @value ||= nil
+    end
 
-		def value=(v)
-			raise "Expected a VDef; got " + v.class.to_s unless v.is_a?(VDef)
-			@value = v
-			add_dependency(v)
-		end
-	end
+    def value=(v)
+      raise "Expected a VDef; got " + v.class.to_s unless v.is_a?(VDef)
+      @value = v
+      add_dependency(v)
+    end
+  end
 
-	module DataAttribute
-		def data
-			@data ||= nil
-		end
+  module DataAttribute
+    def data
+      @data ||= nil
+    end
 
-		def data=(v)
-			raise "Expected a Def or CDef; got " + v.class.to_s unless v.is_a?(CDef) or v.is_a?(Def)
-			@data = v
-			add_dependency(v)
-		end
-	end
+    def data=(v)
+      raise "Expected a Def or CDef; got " + v.class.to_s unless v.is_a?(CDef) or v.is_a?(Def)
+      @data = v
+      add_dependency(v)
+    end
+  end
 
-	module ColorAttribute
-		def color
-			@color ||= "FFFFFF"
-		end
+  module ColorAttribute
+    def color
+      @color ||= "FFFFFF"
+    end
 
-		def color=(c)
-			if c == :invisible or c.to_s.match(/\A[0-9a-fA-F]{6,6}\Z/)
-				@color = c 
-			else
-				raise "Bad color specification: #{c}" 
-			end
-		end
+    def color=(c)
+      if c == :invisible or c.to_s.match(/\A[0-9a-fA-F]{6,6}\Z/)
+        @color = c 
+      else
+        raise "Bad color specification: #{c}" 
+      end
+    end
 
     def alpha
       @alpha ||= 'FF'
@@ -154,5 +154,5 @@ module SimpleRRD
       raise "Bad alpha value: #{a}" unless a.match(/\A[0-9a-fA-F]{2,2}\Z/)
       @alpha = a
     end
-	end
+  end
 end
