@@ -6,4 +6,4 @@ pkg
 examples/*.png
 examples/*.svg
 examples/data/*/*.rrd
-*.gemspec
+.bundle

@@ -1,0 +1,21 @@
+--- 
+dependencies: 
+  yard: 
+    group: 
+    - :default
+    version: = 0.5.8
+    require: []
+
+  bundler: 
+    group: 
+    - :default
+    version: ">= 0"
+specs: 
+- bundler: 
+    version: 0.9.26
+- yard: 
+    version: 0.5.8
+hash: bb9a7e57a07d16c0411f4b77760aa0abec069ca2
+sources: 
+- Rubygems: 
+    uri: http://gemcutter.org
