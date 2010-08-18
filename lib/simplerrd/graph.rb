@@ -3,6 +3,8 @@ module SimpleRRD
     include OptionsHash
     
     ALLOWED_FORMATS=["SVG", "PNG", "EPS", "PDF"]
+    
+    attr_writer :no_full_size_mode
 
     def initialize(opts={})
       @start_at    = nil
