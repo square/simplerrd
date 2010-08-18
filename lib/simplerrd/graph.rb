@@ -20,6 +20,7 @@ module SimpleRRD
       @y2_shift    = nil
       @y2_label    = nil
       @elements    = []
+      @no_full_size_mode = nil
 
       call_hash_methods(opts)
     end
@@ -208,7 +209,7 @@ module SimpleRRD
         flags.concat(['--right-axis', "#{y2_scale}:#{y2_shift}"])
         flags.concat(['--right-axis-label', @y2_label.to_s]) if @height
       end
-      flags.concat(['--full-size-mode']) if @width or @height
+      flags.concat(['--full-size-mode']) if (@width or @height) && !@no_full_size_mode
       flags.concat(['--imgformat', @format]) if @format
       return flags
     end
