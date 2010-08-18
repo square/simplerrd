@@ -159,40 +159,47 @@ describe "SimpleRRD::Graph" do
     exprs.should include('LINE:foo:bar')
   end
 
-  it "should use Runner.run to execute the proper command" do
-    e = Time.now
-    s = e - 3600
+  context "running rrdtool" do
+    before do
+      e = Time.now
+      s = e - 3600
 
-    @g.start_at = s
-    @g.end_at = e
-    @g.title = "MY GRAF"
-    @g.width = 640
-    @g.height = 480
-    @g.format = "PNG"
+      @g.start_at = s
+      @g.end_at = e
+      @g.title = "MY GRAF"
+      @g.width = 640
+      @g.height = 480
+      @g.format = "PNG"
 
-    a = SimpleRRD::Def.new
-    a.should_receive(:definition).and_return('DEF:blah:bloo')
+      a = SimpleRRD::Def.new
+      a.should_receive(:definition).and_return('DEF:blah:bloo')
 
-    d = SimpleRRD::Line.new
-    d.should_receive(:dependencies).and_return([a])
-    d.should_receive(:definition).and_return('LINE:foo:bar')
+      d = SimpleRRD::Line.new
+      d.should_receive(:dependencies).and_return([a])
+      d.should_receive(:definition).and_return('LINE:foo:bar')
 
-    @g.add_element(d)
+      @g.add_element(d)
 
-    expected_command = ['rrdtool', 'graph', '-',
-                        '--start', s.to_i.to_s,
-                        '--end',   e.to_i.to_s,
-                        '--title', "MY GRAF",
-                        '--width', '640',
-                        '--height', '480',
-                        '--full-size-mode',
-                        '--imgformat', 'PNG',
-                        'DEF:blah:bloo',
-                        'LINE:foo:bar']
- 
-    SimpleRRD::Runner.should_receive(:run).with(*expected_command).and_return('ok')
+      @expected_command = ['rrdtool', 'graph', '-',
+                          '--start', s.to_i.to_s,
+                          '--end',   e.to_i.to_s,
+                          '--title', "MY GRAF",
+                          '--width', '640',
+                          '--height', '480',
+                          '--full-size-mode',
+                          '--imgformat', 'PNG',
+                          'DEF:blah:bloo',
+                          'LINE:foo:bar']
+    end
 
-    @g.generate.should == 'ok'
+    it "should use Runner.run to execute the proper command" do
+      SimpleRRD::Runner.should_receive(:run).with(*@expected_command).and_return('ok')
+      @g.generate.should == 'ok'
+    end
+
+    it "should return the rrdtool command to be executed" do
+      @g.rrdtool_command('-').should == @expected_command
+    end
   end
 
   it "should have a builder method .build" do

@@ -222,10 +222,14 @@ module SimpleRRD
     end
 
     def generate(filename = '-')
+      Runner.run(*rrdtool_command(filename))
+    end
+
+    def rrdtool_command(filename)
       cmd = ['rrdtool', 'graph', filename]
       cmd.concat(command_flags)
       cmd.concat(command_expressions)
-      Runner.run(*cmd)
+      cmd
     end
 
     def self.build(&b)
