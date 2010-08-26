@@ -49,7 +49,7 @@ module SimpleRRD
 
     def rrdfile=(f)
       raise "Expected a String; got a " + f.class.to_s unless f.is_a?(String)
-      @rrdfile = f
+      @rrdfile = f.gsub(/:/, '\:')
     end
 
     def ds_name=(n)

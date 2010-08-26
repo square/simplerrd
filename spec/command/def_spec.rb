@@ -4,10 +4,16 @@ describe "SimpleRRD::Def" do
   before do
     @d = SimpleRRD::Def.new
   end
+
   it "should (only) allow passing strings to #rrdfile=" do
     @d.rrdfile = "/etc/passwd"
     @d.rrdfile.should == "/etc/passwd"
     lambda { @d.rrdfile = Time.now }.should raise_error
+  end
+
+  it "escapes unescaped-colons in the rrdfile name string" do
+    @d.rrdfile = "passwd:real"
+    @d.rrdfile.should == "passwd\\:real"
   end
 
   it "should have an auto-generated vname by default" do
