@@ -170,7 +170,7 @@ describe "SimpleRRD::Graph" do
       @g.width = 640
       @g.height = 480
       @g.format = "PNG"
-      @g.font = :helvetica
+      @g.font :helvetica
 
       a = SimpleRRD::Def.new
       a.should_receive(:definition).and_return('DEF:blah:bloo')

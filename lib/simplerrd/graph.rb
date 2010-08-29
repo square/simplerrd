@@ -138,13 +138,14 @@ module SimpleRRD
       end
     end
 
-    def font(val=nil)
-      return self.font = val if val
+    def font(*vals)
+      font = Array(vals)
+      return self.font = font unless font.empty?
       return @font
     end
 
     def font=(f)
-      @font = "DEFAULT:0:#{f.to_s}"
+      @font = "DEFAULT:#{f.size == 1 ? "0:#{f}" : f.reverse.join(":")}"
     end
 
     def y_label(val=nil)
