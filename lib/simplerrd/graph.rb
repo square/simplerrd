@@ -21,6 +21,7 @@ module SimpleRRD
       @y2_scale    = nil
       @y2_shift    = nil
       @y2_label    = nil
+      @font        = nil
       @elements    = []
       @no_full_size_mode = nil
 
@@ -137,6 +138,15 @@ module SimpleRRD
       end
     end
 
+    def font(val=nil)
+      return self.font = val if val
+      return @font
+    end
+
+    def font=(f)
+      @font = "DEFAULT:0:#{f.to_s}"
+    end
+
     def y_label(val=nil)
       return self.y_label = val if val
       return @y_label
@@ -199,6 +209,7 @@ module SimpleRRD
       else
         flags.concat(['--end', 'now'])
       end
+      flags.concat(['--font', @font.to_s]) unless @font.nil?
       flags.concat(['--lower-limit', @lower_limit.to_s]) unless @lower_limit.nil?
       flags.concat(['--upper-limit', @upper_limit.to_s]) unless @upper_limit.nil?
       flags.concat(['--rigid']) if @rigid

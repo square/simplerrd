@@ -170,6 +170,7 @@ describe "SimpleRRD::Graph" do
       @g.width = 640
       @g.height = 480
       @g.format = "PNG"
+      @g.font = :helvetica
 
       a = SimpleRRD::Def.new
       a.should_receive(:definition).and_return('DEF:blah:bloo')
@@ -183,6 +184,7 @@ describe "SimpleRRD::Graph" do
       @expected_command = ['rrdtool', 'graph', '-',
                           '--start', s.to_i.to_s,
                           '--end',   e.to_i.to_s,
+                          '--font', 'DEFAULT:0:helvetica',
                           '--title', "MY GRAF",
                           '--width', '640',
                           '--height', '480',
