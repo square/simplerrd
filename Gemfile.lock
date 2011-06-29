@@ -1,33 +1,18 @@
---- 
-dependencies: 
-  rake: 
-    group: 
-    - :development
-    version: = 0.8.7
-  rspec: 
-    group: 
-    - :development
-    version: = 1.3.0
-  yard: 
-    group: 
-    - :development
-    version: = 0.5.8
-    require: []
+PATH
+  remote: .
+  specs:
+    simplerrd (0.11.2)
 
-  bundler: 
-    group: 
-    - :default
-    version: ">= 0"
-specs: 
-- rake: 
-    version: 0.8.7
-- bundler: 
-    version: 0.9.26
-- rspec: 
-    version: 1.3.0
-- yard: 
-    version: 0.5.8
-hash: e3487ba8f1b96d18fc59da6ec202701e2c376c37
-sources: 
-- Rubygems: 
-    uri: http://gemcutter.org
+GEM
+  remote: http://rubygems.org/
+  specs:
+    rake (0.8.7)
+    rspec (1.3.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rake (= 0.8.7)
+  rspec (= 1.3.0)
+  simplerrd!

@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'bundler'
-
 Gem::Specification.new do |s|
   s.name = "simplerrd"
   s.version = File.read("VERSION").strip
@@ -27,5 +25,6 @@ Gem::Specification.new do |s|
   s.files = Dir['{lib,spec,examples}/**/*'] + %w(simplerrd.gemspec VERSION Rakefile README.markdown LICENSE Gemfile Gemfile.lock)
   s.test_files = Dir['spec/**/*']
 
-  s.add_bundler_dependencies
+  s.add_development_dependency('rake', '0.8.7')
+  s.add_development_dependency('rspec', '1.3.0')
 end
