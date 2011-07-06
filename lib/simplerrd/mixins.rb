@@ -63,15 +63,15 @@ module SimpleRRD
       clear_dependencies 
       ary.each do |term|
         case term
-        when Numeric: 
+        when Numeric
           next
-        when Def:     
+        when Def
           add_dependency(term)
-        when VDef:
+        when VDef
           add_dependency(term)
-        when CDef:
+        when CDef
           add_dependency(term)
-        when String:
+        when String
           next if allowed_functions.include?(term)
           raise "Not an allowed function: #{term}"
         else
@@ -86,11 +86,11 @@ module SimpleRRD
       terms = []
       @rpn_expression.each do |t|
         case t
-        when Numeric: terms << t
-        when Def:     terms << t.vname
-        when VDef:    terms << t.vname 
-        when CDef:    terms << t.vname 
-        when String:  terms << t
+        when Numeric; terms << t
+        when Def;     terms << t.vname
+        when VDef;    terms << t.vname
+        when CDef;    terms << t.vname
+        when String;  terms << t
         else raise "Unexpected term in RPN expression: #{t.inspect}"
         end
       end
